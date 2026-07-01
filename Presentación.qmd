@@ -73,6 +73,8 @@ Se realizó un conteo de los pacientes clasificados como:
 
 ::: {.column width="55%"}
 ```{r}
+library(ggplot2)
+biopsy <- read.csv("biopsy.csv")
 ggplot(biopsy,
        aes(x=class, fill=class))+
 geom_bar()+
@@ -102,9 +104,15 @@ Predominan los casos benignos sobre los malignos.
 - V1 (Clump Thickness)
 
 ```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 8
+
+library(ggplot2)
+biopsy <- read.csv("biopsy.csv")
 ggplot(biopsy,
        aes(x=class,
-           y=as.numeric(Cl.thickness),
+           y=as.numeric(V1),
            fill=class))+
 geom_boxplot()+
 labs(
@@ -112,7 +120,7 @@ title="Grosor celular según diagnóstico",
 x="Diagnóstico",
 y="Grosor celular"
 )+
-theme_minimal()
+theme_minimal(base_size = 24)
 ```
 
 
@@ -136,7 +144,9 @@ Se evaluó la relación entre:
 
 utilizando un gráfico de dispersión y una línea de regresión.
 ```{r}
-ggplot(biopsy, aes(x = Cl.thickness, y = V2, color = class)) +
+library(ggplot2)
+biopsy <- read.csv("biopsy.csv")
+ggplot(biopsy, aes(x = V1, y = V2, color = class)) +
 
   geom_smooth(method = "lm", se = FALSE) +
 
