@@ -1,0 +1,175 @@
+---
+title: "Análisis Exploratorio del Dataset Breast Cancer Biopsy"
+format: revealjs
+embed-resources: true
+editor: visual
+author: "Daniel Alejandro Desposorio Vicente"
+---
+
+# Análisis Exploratorio del Dataset Breast Cancer Biopsy
+
+### Daniel Alejandro
+
+Curso de R
+
+------------------------------------------------------------------------
+
+# Introducción
+
+## Objetivo
+
+Analizar un conjunto de datos de biopsias de cáncer de mama mediante R, empleando:
+
+- Manipulación de datos con **dplyr**
+
+- Visualización con **ggplot2**
+
+- Análisis exploratorio de datos
+
+------------------------------------------------------------------------
+
+# Descripción del dataset
+
+## Breast Cancer Biopsy
+
+- 699 pacientes
+
+- Datos obtenidos de biopsias de mama.
+
+- Variables con valores entre **1 y 10**.
+
+- Diagnóstico final:
+
+  - **Benign**
+
+  - **Malignant**
+
+Principales variables:
+
+- V1: Clump Thickness
+
+- V2: Uniformity of Cell Size
+
+- V3: Uniformity of Cell Shape
+
+- ...
+
+- Class: Diagnóstico
+
+------------------------------------------------------------------------
+
+# Pregunta 1
+
+## ¿Cuál es la distribución de pacientes según el diagnóstico?
+
+::::: columns
+::: {.column width="45%"}
+Se realizó un conteo de los pacientes clasificados como:
+
+- Benign
+
+- Malignant
+:::
+
+::: {.column width="55%"}
+```{r}
+ggplot(biopsy,
+       aes(x=class, fill=class))+
+geom_bar()+
+labs(
+title="Distribución de diagnósticos de cáncer de mama",
+x="Diagnóstico",
+y="Número de pacientes"
+)+
+theme_minimal()
+```
+
+:::
+:::::
+
+### Resultado
+
+Predominan los casos benignos sobre los malignos.
+
+------------------------------------------------------------------------
+
+# Pregunta 2
+
+## ¿Existe diferencia en V1 entre tumores benignos y malignos?
+
+**Variable analizada**
+
+- V1 (Clump Thickness)
+
+```{r}
+ggplot(biopsy,
+       aes(x=class,
+           y=as.numeric(Cl.thickness),
+           fill=class))+
+geom_boxplot()+
+labs(
+title="Grosor celular según diagnóstico",
+x="Diagnóstico",
+y="Grosor celular"
+)+
+theme_minimal()
+```
+
+
+Boxplot comparando ambos grupos.
+
+### Resultado
+
+Los tumores malignos presentan valores de V1 considerablemente mayores que los benignos.
+
+------------------------------------------------------------------------
+
+# Pregunta 3
+
+## ¿Existe relación entre V1 y V2?
+
+Se evaluó la relación entre:
+
+- V1: Clump Thickness
+
+- V2: Uniformity of Cell Size
+
+utilizando un gráfico de dispersión y una línea de regresión.
+```{r}
+ggplot(biopsy, aes(x = Cl.thickness, y = V2, color = class)) +
+
+  geom_smooth(method = "lm", se = FALSE) +
+
+  labs(
+
+    title = "Relación entre V1 y V2 según el diagnóstico",
+
+    x = "V1 (Clump Thickness)",
+
+    y = "V2 (Uniformity of Cell Size)",
+
+    color = "Diagnóstico"
+
+  ) +
+
+  theme_minimal()
+```
+
+
+### Resultado
+
+Existe una relación positiva entre ambas variables y los tumores malignos presentan valores más elevados.
+
+------------------------------------------------------------------------
+
+# Conclusiones
+
+- El análisis exploratorio permitió identificar diferencias claras entre tumores benignos y malignos.
+
+- Los tumores malignos presentan mayores valores en variables relacionadas con alteraciones celulares.
+
+- R y ggplot2 facilitan el análisis y la visualización de datos biomédicos.
+
+------------------------------------------------------------------------
+
+# Gracias
