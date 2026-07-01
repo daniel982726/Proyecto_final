@@ -1,0 +1,127 @@
+---
+title: "Análisis de datos BC"
+output: html_document
+date: "2026-07-01"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+#Introducción El presente análisis utiliza el dataset Breast Cancer
+Wisconsin, obtenido de biopsias de pacientes con tumores mamarios. El
+objetivo es explorar las características celulares asociadas con tumores
+benignos y malignos mediante manipulación de datos y visualización con
+ggplot2.
+
+#Cargarpaquetes
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+#Cargararchivos
+
+```{r}
+biopsy <- read.csv("biopsy.csv")
+head(biopsy)
+```
+ID
+sample code number (not unique).
+V1
+clump thickness.
+V2
+uniformity of cell size.
+V3
+uniformity of cell shape.
+V4
+marginal adhesion.
+V5
+single epithelial cell size.
+V6
+bare nuclei (16 values are missing).
+V7
+bland chromatin.
+V8
+normal nucleoli.
+V9
+mitoses.
+class
+"benign" or "malignant".
+
+*PREGUNTA 1 : ¿ CUAL ES LA FRECUENCIA DE TUMORES BENIGNOS Y MALIGNOS?*
+
+```{r}
+biopsy %>%
+count(class)
+```
+
+**Representación grafica**
+
+```{r}
+ggplot(biopsy,
+       aes(x=class, fill=class))+
+geom_bar()+
+labs(
+title="Distribución de diagnósticos de cáncer de mama",
+x="Diagnóstico",
+y="Número de pacientes"
+)+
+theme_minimal()
+```
+
+*PREGUNTA 2: ¿El grosor celular cambia entre tumores benignos y malignos?*
+
+1. Se define la Variable:
+
+```{r}
+library(dplyr)
+
+biopsy <- biopsy %>%
+
+  rename(Cl.thickness = V1)
+```
+
+2. Representación grafica: 
+
+```{r}
+ggplot(biopsy,
+       aes(x=class,
+           y=as.numeric(Cl.thickness),
+           fill=class))+
+geom_boxplot()+
+labs(
+title="Grosor celular según diagnóstico",
+x="Diagnóstico",
+y="Grosor celular"
+)+
+theme_minimal()
+```
+
+*PREGUNTA 3: ¿Existe una relación entre el grosor del cúmulo celular (V1) y la uniformidad del tamaño celular (V2), y esta relación difiere entre tumores benignos y malignos?*
+
+#Convertir el formato largo
+```{r}
+ggplot(biopsy, aes(x = Cl.thickness, y = V2, color = class)) +
+
+  geom_smooth(method = "lm", se = FALSE) +
+
+  labs(
+
+    title = "Relación entre V1 y V2 según el diagnóstico",
+
+    x = "V1 (Clump Thickness)",
+
+    y = "V2 (Uniformity of Cell Size)",
+
+    color = "Diagnóstico"
+
+  ) +
+
+  theme_minimal()
+```
+
+CONLUSIÓN:
+Los tumores malignos presentan mayores valores de grosor celular (V1) y uniformidad del tamaño celular (V2) que los tumores benignos. Además, existe una tendencia positiva entre ambas variables, indicando que estas características podrían contribuir a diferenciar ambos tipos de tumores.
+
+
